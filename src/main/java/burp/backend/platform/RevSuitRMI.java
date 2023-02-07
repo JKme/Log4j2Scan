@@ -1,5 +1,6 @@
 package burp.backend.platform;
 
+import burp.IRequestInfo;
 import burp.backend.IBackend;
 import burp.poc.IPOC;
 import burp.utils.Config;
@@ -122,6 +123,11 @@ public class RevSuitRMI implements IBackend {
 
     @Override
     public String getNewPayload() {
+        return appendBefore(rmiFlag + "/" + Utils.GetRandomString(10));
+    }
+
+    @Override
+    public String getNewPayload2(IRequestInfo requestInfo) {
         return appendBefore(rmiFlag + "/" + Utils.GetRandomString(10));
     }
 

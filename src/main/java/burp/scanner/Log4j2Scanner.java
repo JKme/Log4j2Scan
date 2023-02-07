@@ -303,7 +303,7 @@ public class Log4j2Scanner implements IScannerCheck {
                         if (Arrays.stream(HEADER_BLACKLIST).noneMatch(h -> h.equalsIgnoreCase(header.Name))) {
                             List<String> needSkipheader = guessHeaders.stream().filter(h -> h.equalsIgnoreCase(header.Name)).collect(Collectors.toList());
                             needSkipheader.forEach(guessHeaders::remove);
-                            String tmpDomain = backend.getNewPayload();
+                            String tmpDomain = backend.getNewPayload2(req);
                             header.Value = poc.generate(tmpDomain);
                             if (header.Name.equalsIgnoreCase("accept")) {
                                 header.Value = "*/*;" + header.Value;
@@ -313,7 +313,7 @@ public class Log4j2Scanner implements IScannerCheck {
                         }
                     }
                     for (String headerName : guessHeaders) {
-                        String tmpDomain = backend.getNewPayload();
+                        String tmpDomain = backend.getNewPayload2(req);
                         tmpHeaders.add(String.format("%s: %s", headerName, poc.generate(tmpDomain)));
                         domainHeaderMap.put(headerName, tmpDomain);
                     }
@@ -325,7 +325,7 @@ public class Log4j2Scanner implements IScannerCheck {
                 tmpRawRequest = parent.helpers.buildHttpMessage(tmpHeaders, rawBody);
                 IRequestInfo tmpReqInfo = parent.helpers.analyzeRequest(tmpRawRequest);
                 for (IParameter param : tmpReqInfo.getParameters()) {
-                    String tmpDomain = backend.getNewPayload();
+                    String tmpDomain = backend.getNewPayload2(req);
                     String exp = poc.generate(tmpDomain);
                     boolean inHeader = false;
                     switch (param.getType()) {
@@ -414,7 +414,7 @@ public class Log4j2Scanner implements IScannerCheck {
                     needSkipheader.forEach(guessHeaders::remove);
                     for (IPOC poc : getSupportedPOCs()) {
                         List<String> tmpHeaders = new ArrayList<>(headers);
-                        String tmpDomain = backend.getNewPayload();
+                        String tmpDomain = backend.getNewPayload2(req);
                         header.Value = poc.generate(tmpDomain);
                         tmpHeaders.set(i, header.toString());
                         byte[] tmpRawRequest = helper.buildHttpMessage(tmpHeaders, Arrays.copyOfRange(rawRequest, req.getBodyOffset(), rawRequest.length));
@@ -439,7 +439,7 @@ public class Log4j2Scanner implements IScannerCheck {
                 List<String> tmpHeaders = new ArrayList<>(headers);
                 Map<String, String> domainHeaderMap = new HashMap<>();
                 for (String headerName : guessHeaders) {
-                    String tmpDomain = backend.getNewPayload();
+                    String tmpDomain = backend.getNewPayload2(req);
                     tmpHeaders.add(String.format("%s: %s", headerName, poc.generate(tmpDomain)));
                     domainHeaderMap.put(headerName, tmpDomain);
                 }
@@ -471,7 +471,7 @@ public class Log4j2Scanner implements IScannerCheck {
         }
         if (canFuzz) {
             for (IPOC poc : getSupportedPOCs()) {
-                String tmpDomain = backend.getNewPayload();
+                String tmpDomain = backend.getNewPayload2(req);
                 String exp = poc.generate(tmpDomain);
                 String finalPaylad = String.format("{\"%s\":%d%s%d}",   //try to create a bad-json.
                         Utils.GetRandomString(Utils.GetRandomNumber(3, 10)),
@@ -493,7 +493,7 @@ public class Log4j2Scanner implements IScannerCheck {
         for (IParameter param : req.getParameters()) {
             for (IPOC poc : getSupportedPOCs()) {
                 try {
-                    String tmpDomain = backend.getNewPayload();
+                    String tmpDomain = backend.getNewPayload2(req);
                     byte[] tmpRawRequest;
                     String exp = poc.generate(tmpDomain);
                     boolean inHeader = false;

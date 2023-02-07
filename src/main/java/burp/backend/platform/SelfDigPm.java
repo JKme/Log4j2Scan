@@ -1,5 +1,6 @@
 package burp.backend.platform;
 
+import burp.IRequestInfo;
 import burp.backend.IBackend;
 import burp.poc.IPOC;
 import burp.utils.Config;
@@ -75,6 +76,16 @@ public class SelfDigPm implements IBackend {
     @Override
     public String getNewPayload() {
         return Utils.getCurrentTimeMillis() + Utils.GetRandomString(5).toLowerCase() + "." + userDomain;
+    }
+
+    @Override
+    public String getNewPayload2(IRequestInfo requestInfo) {
+        String host = requestInfo.getUrl().getHost();
+        String uri =  requestInfo.getUrl().getPath().replace("/", ".");
+        String port =  Integer.toString(requestInfo.getUrl().getPort());
+        String method = requestInfo.getMethod().toLowerCase();
+        String randomStr = Utils.GetRandomString(3).toLowerCase();
+        return String.format("%s.%s.%s.%s%s.%s", randomStr,method,host,port,uri,userDomain);
     }
 
     @Override

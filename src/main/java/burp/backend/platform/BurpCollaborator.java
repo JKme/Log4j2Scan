@@ -1,6 +1,7 @@
 package burp.backend.platform;
 
 import burp.IBurpCollaboratorClientContext;
+import burp.IRequestInfo;
 import burp.backend.IBackend;
 import burp.poc.IPOC;
 import burp.utils.Utils;
@@ -27,6 +28,11 @@ public class BurpCollaborator implements IBackend {
     }
     @Override
     public String getNewPayload() {
+        return bcContext.generatePayload(true);
+    }
+
+    @Override
+    public String getNewPayload2(IRequestInfo requestInfo) {
         return bcContext.generatePayload(true);
     }
 

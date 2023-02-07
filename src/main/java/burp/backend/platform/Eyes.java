@@ -51,7 +51,7 @@ public class Eyes implements IBackend {
     @Override
     public String getNewPayload2(IRequestInfo requestInfo){
         String host = requestInfo.getUrl().getHost();
-        String uri =  requestInfo.getUrl().getPath().replace("/", ".");
+        String uri =  requestInfo.getUrl().getPath().replace("/", ".").toLowerCase();
         String port =  Integer.toString(requestInfo.getUrl().getPort());
         String method = requestInfo.getMethod().toLowerCase();
         String randomStr = Utils.GetRandomString(3).toLowerCase();

